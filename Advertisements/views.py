@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 
-from .serializers import CategorySerializer, ProductsSerializer, ProductsDetailSerializer
+from .serializers import CategorySerializer, ProductsSerializer, ProductsDetailSerializer, ProductsListSerializer
 from .models import Category, Products
 
 from rest_framework.views import APIView
@@ -15,6 +15,13 @@ class ListCategoryAPIView(APIView):
         return Response(serializer.data)
 
 
+class ProductsListAPIView(APIView):
+    def get(self, request):
+        category = Products.objects.all()
+        serializer = ProductsListSerializer(category, many=True)
+        return Response(serializer.data)
+
+#
 class ListProductsAPIView(APIView):
     def get(self, request):
         category = Products.objects.all()
@@ -22,8 +29,8 @@ class ListProductsAPIView(APIView):
         return Response(serializer.data)
 
 
-# class DetailProductsAPIView(APIView):
-#     def get(self, request, pk):
-#         category = Products.objects.get(pk=pk)
-#         serializer = ProductsDetailSerializer(category)
-#         return Response(serializer.data)
+class DetailProductsAPIView(APIView):
+    def get(self, request, pk):
+        category = Products.objects.get(pk=pk)
+        serializer = ProductsDetailSerializer(category)
+        return Response(serializer.data)
